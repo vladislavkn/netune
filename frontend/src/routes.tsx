@@ -1,14 +1,25 @@
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import Login from "./pages/Login";
 import Main from "./pages/Main";
+import Callback from "./pages/Callback";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: (
+      <ProtectedRoute>
+        <Main />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/callback",
-    element: <div>Callback</div>,
+    element: <Callback />,
   },
 ]);
 
