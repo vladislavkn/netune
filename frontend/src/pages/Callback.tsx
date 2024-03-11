@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import getAuthCodeFromCurrentUrl from "../auth/getAuthCodeFromCurrentUrl";
-import getAccessToken from "../auth/getAccessToken";
 import { Link } from "react-router-dom";
+import SpotifyApi from "../api/SpotifyApi";
 
 const Callback: FC = () => {
   const [error, setError] = useState<string | undefined>();
@@ -9,12 +8,7 @@ const Callback: FC = () => {
   useEffect(() => {
     const saveAccessToken = async () => {
       try {
-        const authCode = getAuthCodeFromCurrentUrl();
-        if (!authCode) {
-          throw Error("No auth code found");
-        }
-        const accessToken = await getAccessToken(authCode);
-        localStorage.setItem("accessToken", accessToken);
+        await SpotifyApi.setupAccessTokenOnCallbackPage();
       } catch (e) {
         setError((e as Error).message);
       }
