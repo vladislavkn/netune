@@ -1,15 +1,22 @@
 import { FC, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import SpotifyApi from "../api/SpotifyApi";
+import { useQuery } from "@tanstack/react-query";
+import spotifyApi from "../api/SpotifyApi";
 
 interface ProtectedRoute {
   children: ReactNode;
 }
 
 const ProtectedRoute: FC<ProtectedRoute> = ({ children }) => {
-  if (SpotifyApi.isAuthorized()) {
-    return children;
-  }
+  const { error, isPending } = useQuery({
+    queryKey: ["profile"],
+    queryFn: () => spotifyApi.fetchProfile(),
+  });
+  const isAuthorized = !isPending && !error;
+
+  if (isAuthorized) return children;
+
+  if (isPending) return <div>Loading...</div>;
 
   return <Navigate to="/login" />;
 };

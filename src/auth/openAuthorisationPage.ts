@@ -5,7 +5,7 @@ const openAuthorisationPage = async () => {
   const params = {
     response_type: "code",
     client_id: import.meta.env.VITE_SPOTIFY_APP_CLIENT_ID,
-    scope: "user-read-private user-read-email",
+    scope: "user-top-read user-read-email user-read-private",
     code_challenge_method: "S256",
     code_challenge: codeChallenge,
     redirect_uri: import.meta.env.VITE_CALLBACK_URL,

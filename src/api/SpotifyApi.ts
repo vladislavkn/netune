@@ -1,4 +1,6 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
+import { Artist, Track } from "./SpotifyApi.types";
+import queryClient from "../lib/tanstack-query";
 
 class SpotifyApi {
   private spotifyHttpClient: AxiosInstance;
@@ -7,6 +9,13 @@ class SpotifyApi {
     this.spotifyHttpClient = axios.create({
       baseURL: "https://api.spotify.com/v1",
     });
+
+    this.spotifyHttpClient.interceptors.response.use(
+      null,
+      (error: AxiosError) => {
+        if (error.response?.status === 401) this.logout();
+      }
+    );
 
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) this.setAccessToken(accessToken);
@@ -18,12 +27,12 @@ class SpotifyApi {
   }
 
   public async setupAccessTokenOnCallbackPage() {
-    const authCode = this.getAuthCodeFromCurrentUrl();
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
+    if (!authCode) throw Error("No auth code found");
 
     const codeVerifier = localStorage.getItem("codeVerifier");
-    if (!codeVerifier) {
-      throw Error("No code verifier found.");
-    }
+    if (!codeVerifier) throw Error("No code verifier found.");
 
     const response = await axios.post(
       "https://accounts.spotify.com/api/token",
@@ -33,7 +42,7 @@ class SpotifyApi {
         redirect_uri: import.meta.env.VITE_CALLBACK_URL,
         code_verifier: codeVerifier,
         client_id: import.meta.env.VITE_SPOTIFY_APP_CLIENT_ID,
-      }),
+      }).toString(),
       {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       }
@@ -43,17 +52,10 @@ class SpotifyApi {
     localStorage.setItem("accessToken", response.data.access_token);
   }
 
-  private getAuthCodeFromCurrentUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const authCode = urlParams.get("code");
-    if (!authCode) throw Error("No auth code found");
-
-    return authCode;
-  }
-
   public logout() {
     delete this.spotifyHttpClient.defaults.headers.common["Authorization"];
     localStorage.removeItem("accessToken");
+    queryClient.refetchQueries({ queryKey: ["profile"] });
   }
 
   public isAuthorized() {
@@ -65,7 +67,11 @@ class SpotifyApi {
     return response.data;
   }
 
-  public async fetchTop(type: "artists" | "tracks") {
+  public async fetchTop<T extends "artists" | "tracks">(
+    type: T
+  ): Promise<{
+    items: Array<T extends "artists" ? Artist : Track>;
+  }> {
     const response = await this.spotifyHttpClient.get(`/me/top/${type}`, {
       params: { limit: 12 },
     });

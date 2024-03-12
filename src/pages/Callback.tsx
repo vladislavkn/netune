@@ -1,14 +1,16 @@
 import { FC, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SpotifyApi from "../api/SpotifyApi";
 
 const Callback: FC = () => {
   const [error, setError] = useState<string | undefined>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const saveAccessToken = async () => {
       try {
         await SpotifyApi.setupAccessTokenOnCallbackPage();
+        navigate("/");
       } catch (e) {
         setError((e as Error).message);
       }
