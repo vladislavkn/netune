@@ -64,6 +64,13 @@ class SpotifyApi {
     const response = await this.spotifyHttpClient.get("/me");
     return response.data;
   }
+
+  public async fetchTop(type: "artists" | "tracks") {
+    const response = await this.spotifyHttpClient.get(`/me/top/${type}`, {
+      params: { limit: 12 },
+    });
+    return response.data;
+  }
 }
 
 const spotifyApi = new SpotifyApi();
