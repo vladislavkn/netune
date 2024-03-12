@@ -20,14 +20,22 @@ class SpotifyApi {
   public async setupAccessTokenOnCallbackPage() {
     const authCode = this.getAuthCodeFromCurrentUrl();
 
+    const codeVerifier = localStorage.getItem("codeVerifier");
+    if (!codeVerifier) {
+      throw Error("No code verifier found.");
+    }
+
     const response = await axios.post(
       "https://accounts.spotify.com/api/token",
-      {
+      new URLSearchParams({
         grant_type: "authorization_code",
         code: authCode,
         redirect_uri: import.meta.env.VITE_CALLBACK_URL,
-        code_verifier: localStorage.getItem("codeVerifier"),
+        code_verifier: codeVerifier,
         client_id: import.meta.env.VITE_SPOTIFY_APP_CLIENT_ID,
+      }),
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       }
     );
 
