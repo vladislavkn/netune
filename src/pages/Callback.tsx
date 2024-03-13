@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import SpotifyApi from "../api/SpotifyApi";
+import SpotifyApi from "../spotify/spotifyApi";
 
 const Callback: FC = () => {
   const [error, setError] = useState<string | undefined>();

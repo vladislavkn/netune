@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
-import { Artist, Track } from "./SpotifyApi.types";
 import queryClient from "../lib/tanstack-query";
+import { Artist, Track } from "./spotifyApi.types";
 
 class SpotifyApi {
   private spotifyHttpClient: AxiosInstance;

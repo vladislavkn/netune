@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Artist } from "../api/SpotifyApi.types";
+import { Artist } from "../spotify/spotifyApi.types";
 
 interface UserArtistProps {
   artist: Artist;

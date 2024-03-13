@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import spotifyApi from "../api/SpotifyApi";
+import spotifyApi from "../spotify/spotifyApi";
 
 interface ProtectedRoute {
   children: ReactNode;

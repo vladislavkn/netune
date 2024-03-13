@@ -1,5 +1,5 @@
 import { FC } from "react";
-import openAuthorisationPage from "../auth/openAuthorisationPage";
+import openAuthorisationPage from "../spotify/openAuthorisationPage";
 
 const Login: FC = () => {
   return (

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Track } from "../api/SpotifyApi.types";
+import { Track } from "../spotify/spotifyApi.types";
 
 interface UserTrackProps {
   track: Track;

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-import spotifyApi from "../api/SpotifyApi";
+import spotifyApi from "../spotify/spotifyApi";
 import UserTrack from "./UserTrack";
 
 const UserTrackList: FC = () => {
