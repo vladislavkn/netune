@@ -69,13 +69,11 @@ class SpotifyApi {
 
   public async fetchTop<T extends "artists" | "tracks">(
     type: T
-  ): Promise<{
-    items: Array<T extends "artists" ? Artist : Track>;
-  }> {
+  ): Promise<Array<T extends "artists" ? Artist : Track>> {
     const response = await this.spotifyHttpClient.get(`/me/top/${type}`, {
       params: { limit: 12 },
     });
-    return response.data;
+    return response.data.items;
   }
 }
 

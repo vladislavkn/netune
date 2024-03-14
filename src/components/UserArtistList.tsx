@@ -1,13 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-import spotifyApi from "../spotify/spotifyApi";
 import UserArtist from "./UserArtist";
+import useArtists from "../hooks/useArtists";
 
 const UserArtistList: FC = () => {
-  const { isPending, error, data } = useQuery({
-    queryKey: ["artists"],
-    queryFn: () => spotifyApi.fetchTop("artists"),
-  });
+  const { isPending, error, data } = useArtists();
 
   if (error) return <div>Error: cannot fetch artists</div>;
   if (isPending) return <div>Loading artists...</div>;
@@ -16,7 +12,7 @@ const UserArtistList: FC = () => {
     <section>
       <h2>Artists</h2>
       <ul>
-        {data.items.map((artist) => (
+        {data.map((artist) => (
           <UserArtist key={artist.id} artist={artist} />
         ))}
       </ul>

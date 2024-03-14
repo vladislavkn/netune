@@ -1,13 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-import spotifyApi from "../spotify/spotifyApi";
 import UserTrack from "./UserTrack";
+import useTracks from "../hooks/useTracks";
 
 const UserTrackList: FC = () => {
-  const { isPending, error, data } = useQuery({
-    queryKey: ["tracks"],
-    queryFn: () => spotifyApi.fetchTop("tracks"),
-  });
+  const { isPending, error, data } = useTracks();
 
   if (error) return <div>Error: cannot fetch tracks</div>;
   if (isPending) return <div>Loading tracks...</div>;
@@ -16,7 +12,7 @@ const UserTrackList: FC = () => {
     <section>
       <h2>Tracks</h2>
       <ul>
-        {data.items.map((track) => (
+        {data.map((track) => (
           <UserTrack key={track.id} track={track} />
         ))}
       </ul>
