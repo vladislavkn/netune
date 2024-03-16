@@ -3,7 +3,7 @@ import { Track, Artist } from "../spotify/spotifyApi.types";
 import { UserMusicData } from "./llmApi.types";
 
 class LLMApi {
-  private readonly TIMEOUT = 300_000;
+  private readonly TIMEOUT = 450_000;
 
   public async fetchMusicTaste(
     tracks: Track[],

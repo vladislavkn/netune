@@ -22,6 +22,10 @@ const RefetchFieldButton: FC<RefetchFieldButtonProps> = ({
     return () => clearInterval(intervalRef.current);
   }, []);
 
+  const secondsLeftTotal = Math.round(msLeft / 1000);
+  const minutesLeft = Math.floor(secondsLeftTotal / 60);
+  const secondsLeft = secondsLeftTotal % 60;
+
   return (
     <Button
       variant="secondary"
@@ -33,7 +37,8 @@ const RefetchFieldButton: FC<RefetchFieldButtonProps> = ({
       Refetch
       {msLeft > 0 ? (
         <span className="tabular-nums ml-1">
-          ({Math.round(msLeft / 1000)}s left)
+          ({minutesLeft > 0 ? `${minutesLeft}m ` : null}
+          {secondsLeft}s left)
         </span>
       ) : null}
     </Button>
