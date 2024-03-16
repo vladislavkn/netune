@@ -91,7 +91,6 @@ class SpotifyApi {
         params: {
           q: `track:${name}`,
           type: "track",
-          market: "US",
           limit: 1,
         },
       });
