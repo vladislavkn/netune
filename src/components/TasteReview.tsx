@@ -31,8 +31,8 @@ const TasteReview: FC = () => {
         </span>
         {data}
       </p>
-      <Button size="lg">
-        <Share2 className="h-6 w-6 mr-4" onClick={shareReview} /> Share
+      <Button onClick={shareReview} size="lg">
+        <Share2 className="h-6 w-6 mr-4" /> Share
       </Button>
     </section>
   );
