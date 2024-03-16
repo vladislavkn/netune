@@ -1,7 +1,6 @@
 import { toast } from "sonner";
 
 const share = async (title: string, text: string) => {
-  alert(navigator.share);
   try {
     if (navigator.share) {
       await navigator.share({ title, text });
