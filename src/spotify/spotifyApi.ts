@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import queryClient from "../lib/tanstack-query";
-import { Artist, Track } from "./spotifyApi.types";
+import { Artist, Track, User } from "./spotifyApi.types";
 
 class SpotifyApi {
   private spotifyHttpClient: AxiosInstance;
@@ -63,7 +63,7 @@ class SpotifyApi {
   }
 
   public async fetchProfile() {
-    const response = await this.spotifyHttpClient.get("/me");
+    const response = await this.spotifyHttpClient.get<User>("/me");
     return response.data;
   }
 

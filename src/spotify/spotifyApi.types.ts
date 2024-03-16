@@ -1,3 +1,9 @@
+export interface SpotifyImage {
+  url: string;
+  height: number;
+  width: number;
+}
+
 export interface Artist {
   external_urls: {
     spotify: string;
@@ -7,11 +13,7 @@ export interface Artist {
   };
   genres: string[];
   id: string;
-  images: {
-    url: string;
-    height: number;
-    width: number;
-  }[];
+  images: SpotifyImage[];
   name: string;
 }
 
@@ -28,4 +30,9 @@ export interface Track {
   };
   id: string;
   name: string;
+}
+
+export interface User {
+  display_name: string;
+  images: SpotifyImage[];
 }
