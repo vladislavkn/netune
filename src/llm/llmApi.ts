@@ -7,10 +7,15 @@ class LLMApi {
     tracks: Track[],
     artists: Artist[]
   ): Promise<string> {
+    const savedReview = localStorage.getItem("review");
+    if (savedReview) return savedReview;
+
     const response = await axios.post<string>(
       import.meta.env.VITE_BACKEND_API + "/taste",
       this.transformUserMusicData(tracks, artists)
     );
+
+    localStorage.setItem("review", response.data);
     return response.data;
   }
 
@@ -18,11 +23,15 @@ class LLMApi {
     tracks: Track[],
     artists: Artist[]
   ): Promise<string[]> {
+    const savedSuggestions = localStorage.getItem("suggestions");
+    if (savedSuggestions) return JSON.parse(savedSuggestions);
+
     const response = await axios.post<string[]>(
       import.meta.env.VITE_BACKEND_API + "/suggestions",
       this.transformUserMusicData(tracks, artists)
     );
 
+    localStorage.setItem("suggestions", JSON.stringify(response.data));
     return response.data;
   }
 
