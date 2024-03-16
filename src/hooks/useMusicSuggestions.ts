@@ -17,7 +17,7 @@ const useMusicSuggestions = () => {
   } = useQuery({
     queryKey: ["suggestions"],
     queryFn: () =>
-      llmApi.fetchSuggestions(spotifyData.tracks!, spotifyData.artists!),
+      llmApi.fetchSuggestions(spotifyData!.tracks, spotifyData!.artists),
     enabled: Boolean(spotifyData),
     retry: false,
     refetchOnMount: false,

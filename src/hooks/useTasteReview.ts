@@ -17,7 +17,7 @@ const useTasteReview = () => {
   } = useQuery({
     queryKey: ["review"],
     queryFn: () =>
-      llmApi.fetchMusicTaste(spotifyData.tracks!, spotifyData.artists!),
+      llmApi.fetchMusicTaste(spotifyData!.tracks!, spotifyData!.artists!),
     enabled: Boolean(spotifyData),
     retry: false,
     refetchOnMount: false,

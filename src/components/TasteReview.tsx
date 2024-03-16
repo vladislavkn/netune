@@ -4,6 +4,7 @@ import ErrorAlert from "./Error";
 import Loading from "./Loading";
 import { Button } from "./ui/button";
 import { Share2 } from "lucide-react";
+import share from "@/lib/share";
 
 const TasteReview: FC = () => {
   const { isPending, isError, data, refetch } = useTasteReview();
@@ -11,7 +12,13 @@ const TasteReview: FC = () => {
   if (isError)
     return <ErrorAlert onReload={refetch}>Failed to load review</ErrorAlert>;
   if (isPending)
-    return <Loading>Asking AI to review yoour music taste...</Loading>;
+    return <Loading>Asking AI to review your music taste...</Loading>;
+
+  const shareReview = () =>
+    share(
+      "Netune: what AI thinks about my music taste?",
+      `AI says: ${data}.\nCheck it also on https://vnetune.vercel.app!`
+    );
 
   return (
     <section>
@@ -25,7 +32,7 @@ const TasteReview: FC = () => {
         {data}
       </p>
       <Button size="lg">
-        <Share2 className="h-6 w-6 mr-4" /> Share
+        <Share2 className="h-6 w-6 mr-4" onClick={shareReview} /> Share
       </Button>
     </section>
   );

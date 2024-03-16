@@ -29,9 +29,12 @@ const useTracksAndArtists = () => {
 
   const isPending = isTracksPending || isArtistsPending;
   const isError = isArtistsError || isTracksError;
-  const data = { artists: artistsData, tracks: tracksData };
+  const data =
+    artistsData && tracksData
+      ? { artists: artistsData, tracks: tracksData }
+      : undefined;
 
-  return { isPending, isError, data: data, refetch };
+  return { isPending, isError, data, refetch };
 };
 
 export default useTracksAndArtists;

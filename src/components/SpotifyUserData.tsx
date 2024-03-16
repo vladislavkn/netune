@@ -20,7 +20,7 @@ const SpotifyUserStats: FC = () => {
     <div className="bg-zinc-900 rounded-lg">
       <SpotifySection
         title="Tracks"
-        items={data.tracks!.map((track) => ({
+        items={data!.tracks.map((track) => ({
           id: track.id,
           title: track.name,
           secondLine: track.artists.map((artist) => artist.name).join(", "),
@@ -31,7 +31,7 @@ const SpotifyUserStats: FC = () => {
       />
       <SpotifySection
         title="Artists"
-        items={data.artists!.map((artist) => ({
+        items={data!.artists.map((artist) => ({
           id: artist.id,
           title: artist.name,
           secondLine: artist.followers.total + " followers",
