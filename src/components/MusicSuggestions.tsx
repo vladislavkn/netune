@@ -1,16 +1,19 @@
 import { FC } from "react";
 import useMusicSuggestions from "../hooks/useMusicSuggestions";
+import TrackSuggestionItem from "./TrackSuggestionItem";
 
 const MusicSuggestions: FC = () => {
-  const { isPending, error, data } = useMusicSuggestions();
+  const { isPending, isError, data } = useMusicSuggestions();
 
-  if (error) return <div>Error: cannot fetch suggestions</div>;
+  if (isError) return <div>Error: cannot fetch suggestions</div>;
   if (isPending) return <div>Loading suggestions...</div>;
 
   return (
     <section>
       <h2>Suggestions</h2>
-      <p>{data}</p>
+      {data?.map((trackName) => (
+        <TrackSuggestionItem key={trackName} trackName={trackName} />
+      ))}
     </section>
   );
 };

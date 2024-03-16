@@ -70,10 +70,33 @@ class SpotifyApi {
   public async fetchTop<T extends "artists" | "tracks">(
     type: T
   ): Promise<Array<T extends "artists" ? Artist : Track>> {
-    const response = await this.spotifyHttpClient.get(`/me/top/${type}`, {
+    const response = await this.spotifyHttpClient.get<{
+      items: Array<T extends "artists" ? Artist : Track>;
+    }>(`/me/top/${type}`, {
       params: { limit: 12 },
     });
+
     return response.data.items;
+  }
+
+  public async searchTrack(name: string): Promise<Track> {
+    console.log("load track:", name);
+    try {
+      const response = await this.spotifyHttpClient.get<{
+        tracks: { items: Track[] };
+      }>("/search", {
+        params: {
+          q: `track:${name}`,
+          type: "track",
+          market: "US",
+          limit: 1,
+        },
+      });
+      return response.data.tracks.items[0];
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 }
 

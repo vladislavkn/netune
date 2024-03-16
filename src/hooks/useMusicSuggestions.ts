@@ -6,19 +6,19 @@ import useArtists from "./useArtists";
 const useMusicSuggestions = () => {
   const {
     isPending: isArtistsPending,
-    error: artistsError,
+    isError: isArtistsError,
     data: artistsData,
   } = useArtists();
 
   const {
     isPending: isTracksPending,
-    error: tracksError,
+    isError: isTracksError,
     data: tracksData,
   } = useTracks();
 
   const {
     isPending: isSuggestionsPending,
-    error: suggestionsError,
+    isError: isSuggestionsError,
     data: suggestionsData,
   } = useQuery({
     queryKey: ["suggestions"],
@@ -32,9 +32,9 @@ const useMusicSuggestions = () => {
   });
 
   const isPending = isArtistsPending || isTracksPending || isSuggestionsPending;
-  const error = artistsError || tracksError || suggestionsError;
+  const isError = isArtistsError || isTracksError || isSuggestionsError;
 
-  return { isPending, error, data: suggestionsData };
+  return { isPending, isError, data: suggestionsData };
 };
 
 export default useMusicSuggestions;
