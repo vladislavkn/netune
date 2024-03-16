@@ -4,9 +4,11 @@ import TrackSuggestionItem from "./TrackSuggestionItem";
 import ErrorAlert from "./Error";
 import Loading from "./Loading";
 import SpotifySection from "./SporifySection";
+import RefetchFieldButton from "./RefetchFieldButton";
 
 const MusicSuggestions: FC = () => {
-  const { isPending, isError, data, refetch } = useMusicSuggestions();
+  const { isPending, isError, data, refetch, refetchForce } =
+    useMusicSuggestions();
 
   if (isError)
     return (
@@ -20,6 +22,12 @@ const MusicSuggestions: FC = () => {
       items={data!.map((title) => ({ title, id: title }))}
       title="AI recommends you to check those tracks"
       itemComponent={TrackSuggestionItem}
+      bottomSlot={
+        <RefetchFieldButton
+          fieldName="suggestions"
+          refetchForce={refetchForce}
+        />
+      }
     />
   );
 };

@@ -3,36 +3,67 @@ import { Track, Artist } from "../spotify/spotifyApi.types";
 import { UserMusicData } from "./llmApi.types";
 
 class LLMApi {
+  private readonly TIMEOUT = 300_000;
+
   public async fetchMusicTaste(
     tracks: Track[],
-    artists: Artist[]
+    artists: Artist[],
+    force = false
   ): Promise<string> {
-    const savedReview = localStorage.getItem("review");
-    if (savedReview) return savedReview;
+    let result: string | undefined;
+    if (this.needUpdateField("review", force)) {
+      const response = await axios.post<string | undefined>(
+        import.meta.env.VITE_BACKEND_API + "/taste",
+        this.transformUserMusicData(tracks, artists)
+      );
 
-    const response = await axios.post<string>(
-      import.meta.env.VITE_BACKEND_API + "/taste",
-      this.transformUserMusicData(tracks, artists)
-    );
+      if (response.data) {
+        localStorage.setItem("reviewUpdated", Date.now().toString());
+        localStorage.setItem("review", response.data);
+        result = response.data;
+      }
+    }
 
-    localStorage.setItem("review", response.data);
-    return response.data;
+    result = result ?? localStorage.getItem("review")!;
+    return result;
   }
 
   public async fetchSuggestions(
     tracks: Track[],
-    artists: Artist[]
+    artists: Artist[],
+    force = false
   ): Promise<string[]> {
-    const savedSuggestions = localStorage.getItem("suggestions");
-    if (savedSuggestions) return JSON.parse(savedSuggestions);
+    let result: string[] | undefined;
+    if (this.needUpdateField("suggestions", force)) {
+      const response = await axios.post<string[] | undefined>(
+        import.meta.env.VITE_BACKEND_API + "/suggestions",
+        this.transformUserMusicData(tracks, artists)
+      );
 
-    const response = await axios.post<string[]>(
-      import.meta.env.VITE_BACKEND_API + "/suggestions",
-      this.transformUserMusicData(tracks, artists)
-    );
+      if (response.data && response.data.length > 0) {
+        localStorage.setItem("suggestionsUpdated", Date.now().toString());
+        localStorage.setItem("suggestions", JSON.stringify(response.data));
+        result = response.data;
+      }
+    }
 
-    localStorage.setItem("suggestions", JSON.stringify(response.data));
-    return response.data;
+    result =
+      result ?? (JSON.parse(localStorage.getItem("suggestions")!) as string[]);
+    return result;
+  }
+
+  private needUpdateField(fieldName: string, force: boolean) {
+    const currentFieldValue = localStorage.getItem(fieldName);
+    if (!currentFieldValue) return true;
+    const fieldLastUpdatedString = localStorage.getItem(`${fieldName}Updated`);
+    if (!fieldLastUpdatedString) return true;
+
+    return force && this.getMSTillNextUpdate(fieldName) <= 0;
+  }
+
+  public getMSTillNextUpdate(fieldName: string) {
+    const fieldLastUpdatedString = localStorage.getItem(`${fieldName}Updated`)!;
+    return this.TIMEOUT - (Date.now() - parseInt(fieldLastUpdatedString));
   }
 
   private transformUserMusicData(

@@ -1,15 +1,17 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 interface SpotifySectionProps<T> {
   title: string;
   items: T[];
   itemComponent: FC<T>;
+  bottomSlot?: ReactNode;
 }
 
 function SpotifySection<T extends { id: string }>({
   title,
   items,
   itemComponent: Item,
+  bottomSlot,
 }: SpotifySectionProps<T>) {
   return (
     <section className="rounded-md bg-zinc-900 text-white px-1 py-2 sm:px-3 sm:py-3">
@@ -19,6 +21,7 @@ function SpotifySection<T extends { id: string }>({
           <Item key={item.id} {...item} />
         ))}
       </ul>
+      {bottomSlot && <div className="mt-2">{bottomSlot}</div>}
     </section>
   );
 }

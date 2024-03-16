@@ -5,9 +5,10 @@ import Loading from "./Loading";
 import { Button } from "./ui/button";
 import { Share2 } from "lucide-react";
 import share from "@/lib/share";
+import RefetchFieldButton from "./RefetchFieldButton";
 
 const TasteReview: FC = () => {
-  const { isPending, isError, data, refetch } = useTasteReview();
+  const { isPending, isError, data, refetch, refetchForce } = useTasteReview();
 
   if (isError)
     return <ErrorAlert onReload={refetch}>Failed to load review</ErrorAlert>;
@@ -31,9 +32,12 @@ const TasteReview: FC = () => {
         </span>
         {data}
       </p>
-      <Button onClick={shareReview} size="lg">
-        <Share2 className="h-6 w-6 mr-4" /> Share
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button onClick={shareReview} size="lg">
+          <Share2 className="h-6 w-6 mr-4" /> Share
+        </Button>
+        <RefetchFieldButton fieldName="review" refetchForce={refetchForce} />
+      </div>
     </section>
   );
 };
