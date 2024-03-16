@@ -24,7 +24,7 @@ const SpotifySectionItem: FC<SpootifySectionItemProps> = ({
           <p className="text-gray-300 text-xs truncate">{secondLine}</p>
         </div>
       </div>
-      <ExternalLink className="text-gray-100 invisible group-hover:visible w-4 h-4" />
+      <ExternalLink className="text-gray-100 invisible group-hover:visible w-4 h-4 shrink-0" />
     </li>
   </a>
 );
