@@ -20,7 +20,8 @@ const Navigation: FC = () => {
       <div className="flex items-center gap-2">
         <Button variant="ghost" asChild>
           <a href="https://github.com/vladislavkn/netune" target="_blank">
-            <Github className="w-4 h-4 mr-2" /> Check it out on Github
+            <Github className="w-4 h-4 mr-2" />{" "}
+            <span className="hidden sm:block">Check it out on</span> Github
           </a>
         </Button>
         {user && (
