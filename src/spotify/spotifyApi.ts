@@ -13,7 +13,10 @@ class SpotifyApi {
     this.spotifyHttpClient.interceptors.response.use(
       null,
       (error: AxiosError) => {
-        if (error.response?.status === 401) this.logout();
+        if (error.response?.status === 401) {
+          if (error.config?.url === "/me") return;
+          this.logout();
+        }
       }
     );
 
@@ -55,7 +58,7 @@ class SpotifyApi {
   public logout() {
     delete this.spotifyHttpClient.defaults.headers.common["Authorization"];
     localStorage.removeItem("accessToken");
-    queryClient.refetchQueries({ queryKey: ["profile"] });
+    queryClient.invalidateQueries({ queryKey: ["profile"] });
   }
 
   public isAuthorized() {

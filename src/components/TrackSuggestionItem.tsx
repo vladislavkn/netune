@@ -1,23 +1,25 @@
 import { FC } from "react";
 import useSearchedTrack from "../hooks/useSearchedTrack";
+import SpotifySectionItem from "./SpotifySectionItem";
 
 interface TrackSuggestionItemProps {
-  trackName: string;
+  title: string;
+  id: string;
 }
 
-const TrackSuggestionItem: FC<TrackSuggestionItemProps> = ({ trackName }) => {
-  const { isError, isPending, data } = useSearchedTrack(trackName);
+const TrackSuggestionItem: FC<TrackSuggestionItemProps> = ({ title }) => {
+  const { isError, isPending, data } = useSearchedTrack(title);
 
-  if (isError)
-    return <div>Error: cannot fetch track "{trackName}" from spotify</div>;
-  if (isPending) return <div>Loading track "{trackName}"...</div>;
+  if (isError || isPending) return null;
 
   return (
-    <div>
-      <a href={data.external_urls.spotify}>
-        {data.name} ({data.artists.map((artist) => artist.name).join(", ")})
-      </a>
-    </div>
+    <SpotifySectionItem
+      title={data.name}
+      url={data.external_urls.spotify}
+      secondLine={data.artists.map((artist) => artist.name).join(", ")}
+      id={data.id}
+      imageSrc={data?.album?.images?.[0]?.url}
+    />
   );
 };
 

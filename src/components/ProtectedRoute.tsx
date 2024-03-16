@@ -7,10 +7,9 @@ interface ProtectedRoute {
 }
 
 const ProtectedRoute: FC<ProtectedRoute> = ({ children }) => {
-  const { error, isPending } = useUser();
-  const isAuthorized = !isPending && !error;
+  const { isPending, user } = useUser();
 
-  if (isAuthorized) return children;
+  if (user) return children;
 
   if (isPending) return <div>Loading...</div>;
 

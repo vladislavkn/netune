@@ -1,40 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
 import llmApi from "../llm/llmApi";
-import useTracks from "./useTracks";
-import useArtists from "./useArtists";
+import useTracksAndArtists from "./useTracksAndArtists";
 
 const useMusicSuggestions = () => {
   const {
-    isPending: isArtistsPending,
-    isError: isArtistsError,
-    data: artistsData,
-  } = useArtists();
-
-  const {
-    isPending: isTracksPending,
-    isError: isTracksError,
-    data: tracksData,
-  } = useTracks();
+    isPending: isSpotifyPending,
+    isError: isSpotifyError,
+    data: spotifyData,
+  } = useTracksAndArtists();
 
   const {
     isPending: isSuggestionsPending,
     isError: isSuggestionsError,
     data: suggestionsData,
+    refetch,
   } = useQuery({
     queryKey: ["suggestions"],
-    queryFn: () => llmApi.fetchSuggestions(tracksData!, artistsData!),
-    enabled: Boolean(tracksData && artistsData),
-    retry: 3,
-    retryDelay: 5000,
+    queryFn: () =>
+      llmApi.fetchSuggestions(spotifyData.tracks!, spotifyData.artists!),
+    enabled: Boolean(spotifyData),
+    retry: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
 
-  const isPending = isArtistsPending || isTracksPending || isSuggestionsPending;
-  const isError = isArtistsError || isTracksError || isSuggestionsError;
-
-  return { isPending, isError, data: suggestionsData };
+  const isPending = isSpotifyPending || isSuggestionsPending;
+  const isError = isSpotifyError || isSuggestionsError;
+  return { isPending, isError, data: suggestionsData, refetch };
 };
 
 export default useMusicSuggestions;

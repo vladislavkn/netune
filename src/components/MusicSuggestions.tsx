@@ -1,20 +1,26 @@
 import { FC } from "react";
 import useMusicSuggestions from "../hooks/useMusicSuggestions";
 import TrackSuggestionItem from "./TrackSuggestionItem";
+import ErrorAlert from "./Error";
+import Loading from "./Loading";
+import SpotifySection from "./SporifySection";
 
 const MusicSuggestions: FC = () => {
-  const { isPending, isError, data } = useMusicSuggestions();
+  const { isPending, isError, data, refetch } = useMusicSuggestions();
 
-  if (isError) return <div>Error: cannot fetch suggestions</div>;
-  if (isPending) return <div>Loading suggestions...</div>;
+  if (isError)
+    return (
+      <ErrorAlert onReload={refetch}>Failed to load suggestions</ErrorAlert>
+    );
+  if (isPending)
+    return <Loading>Asking AI about tracks you may also like...</Loading>;
 
   return (
-    <section>
-      <h2>Suggestions</h2>
-      {data?.map((trackName) => (
-        <TrackSuggestionItem key={trackName} trackName={trackName} />
-      ))}
-    </section>
+    <SpotifySection
+      items={data!.map((title) => ({ title, id: title }))}
+      title="AI recommends you to check those tracks"
+      itemComponent={TrackSuggestionItem}
+    />
   );
 };
 

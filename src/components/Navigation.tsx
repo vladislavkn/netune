@@ -1,14 +1,15 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import useUser from "@/hooks/useUser";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { Github, LogOut } from "lucide-react";
+import spotifyApi from "@/spotify/spotifyApi";
 
 const Navigation: FC = () => {
-  const { data: user } = useUser();
+  const { user } = useUser();
 
   return (
-    <nav className="container flex items-center justify-between py-4">
+    <nav className="flex items-center justify-between py-4">
       <div className="flex items-center gap-2">
         <Avatar>
           <AvatarImage src="logo.jpg" />
@@ -23,8 +24,9 @@ const Navigation: FC = () => {
           </a>
         </Button>
         {user && (
-          <Button variant="destructive">
-            <LogOut className="ww-4 h-4 mr-2" /> Logout
+          <Button variant="destructive" onClick={() => spotifyApi.logout()}>
+            <LogOut className="ww-4 h-4 mr-2" />
+            Logout
           </Button>
         )}
       </div>

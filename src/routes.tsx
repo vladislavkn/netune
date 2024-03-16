@@ -3,23 +3,29 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Main from "./pages/Main";
 import Callback from "./pages/Callback";
+import Layout from "./components/Layout";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <Main />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/callback",
-    element: <Callback />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute>
+            <Main />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/callback",
+        element: <Callback />,
+      },
+    ],
   },
 ]);
 

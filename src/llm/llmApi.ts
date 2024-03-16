@@ -11,7 +11,6 @@ class LLMApi {
       import.meta.env.VITE_BACKEND_API + "/taste",
       this.transformUserMusicData(tracks, artists)
     );
-
     return response.data;
   }
 
@@ -19,6 +18,7 @@ class LLMApi {
     tracks: Track[],
     artists: Artist[]
   ): Promise<string[]> {
+    return [];
     const response = await axios.post<string[]>(
       import.meta.env.VITE_BACKEND_API + "/suggestions",
       this.transformUserMusicData(tracks, artists)

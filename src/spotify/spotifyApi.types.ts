@@ -18,6 +18,7 @@ export interface Artist {
 }
 
 export interface Track {
+  album: { images: SpotifyImage[] };
   artists: {
     external_urls: {
       spotify: string;

@@ -1,40 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
 import llmApi from "../llm/llmApi";
-import useTracks from "./useTracks";
-import useArtists from "./useArtists";
+import useTracksAndArtists from "./useTracksAndArtists";
 
 const useTasteReview = () => {
   const {
-    isPending: isArtistsPending,
-    error: artistsError,
-    data: artistsData,
-  } = useArtists();
-
-  const {
-    isPending: isTracksPending,
-    error: tracksError,
-    data: tracksData,
-  } = useTracks();
+    isPending: isSpotifyPending,
+    isError: isSpotifyError,
+    data: spotifyData,
+  } = useTracksAndArtists();
 
   const {
     isPending: isReviewPending,
-    error: reviewError,
+    isError: isReviewError,
     data: reviewData,
+    refetch,
   } = useQuery({
     queryKey: ["review"],
-    queryFn: () => llmApi.fetchMusicTaste(tracksData!, artistsData!),
-    enabled: Boolean(tracksData && artistsData),
-    retry: 3,
-    retryDelay: 5000,
+    queryFn: () =>
+      llmApi.fetchMusicTaste(spotifyData.tracks!, spotifyData.artists!),
+    enabled: Boolean(spotifyData),
+    retry: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
 
-  const isPending = isArtistsPending || isTracksPending || isReviewPending;
-  const error = artistsError || tracksError || reviewError;
+  const isPending = isSpotifyPending || isReviewPending;
+  const isError = isSpotifyError || isReviewError;
 
-  return { isPending, error, data: reviewData };
+  return { isPending, isError, data: reviewData, refetch };
 };
 
 export default useTasteReview;
