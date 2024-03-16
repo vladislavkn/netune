@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Track } from "../spotify/spotifyApi.types";
 import { ExternalLink } from "lucide-react";
 
 export interface SpootifySectionItemProps {
