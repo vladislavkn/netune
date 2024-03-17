@@ -17,10 +17,10 @@ const SpotifySectionItem: FC<SpootifySectionItemProps> = ({
 }) => (
   <a href={url} target="_blank">
     <li className="flex items-center justify-between gap-2 p-3 hover:bg-zinc-800 cursor-pointer rounded group">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-hidden">
         <img src={imageSrc} className="h-12 w-12 rounded bg-gray-500" />
-        <div className="max-w-full overflow-hidden">
-          <h6 className="font-bold text-sm text-gray-100">{title}</h6>
+        <div className="flex-grow max-w-[calc(100%-3.5rem)]">
+          <h6 className="font-bold text-sm text-gray-100 truncate">{title}</h6>
           <p className="text-gray-300 text-xs truncate">{secondLine}</p>
         </div>
       </div>
